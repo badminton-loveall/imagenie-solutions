@@ -40,6 +40,22 @@ Each product is shown as the paper it prints: a Qwait token, a Smrithi photo sli
 
 The design source lives in the Imagenie Magic Patterns workspace.
 
+## Admin: leads and subscriptions (`/admin`)
+
+Sign in at `/admin` with an approved email. There's no password: you get a one-time sign-in link by email.
+
+- **Leads** (`/admin/leads`): every website enquiry, filterable by status and by follow-ups that are due, with search. Open one to call, email or WhatsApp them, set status, assign it, pick a follow-up date and keep notes. "Add as subscription" turns a lead into a customer and marks it won.
+- **Subscriptions** (`/admin/subscriptions`): customers, product, plan, amount, billing cycle, status and renewal date. The strip at the top shows monthly recurring revenue (active plans only; quarterly and yearly amounts spread per month, one-time payments excluded), active and trial counts, renewals in the next 30 days and past-due accounts. Overdue renewals are highlighted.
+
+**Who can get in:** emails in the `admin_users` table. To add someone, insert their email (lowercase) in Supabase Table Editor → `admin_users`. Anyone else who signs in sees a "no admin access" message and no data; row-level security enforces this in the database, not just the page.
+
+**One-time Supabase setup for sign-in links:** in the Supabase dashboard, open the imagenie project, then Authentication → URL Configuration. Set **Site URL** to the live site address, and add these to **Redirect URLs**:
+
+- `http://localhost:5173/admin/leads` (local development)
+- `https://<your live domain>/admin/leads`
+
+Without this, sign-in links send people to the wrong address. Supabase's built-in email sender allows only a few sign-in emails per hour, which is enough for a small team; connect your own SMTP under Authentication → Emails for more.
+
 ## Contact form and leads CRM
 
 Enquiries from `/contact` are saved to the `leads` table in the **imagenie** Supabase project (`ovkxyvstnavhhwacxkul`, Mumbai). The form posts straight to Supabase's REST API from `src/lib/leads.ts`; no extra package is needed. If saving fails, the visitor is offered the same message pre-filled in their email app, and the WhatsApp box always works.
