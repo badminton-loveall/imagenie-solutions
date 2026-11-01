@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+/*
+  Ticket Stub direction.
+  Base is cool chalk, ink is peacock. Colour comes from the paper tints of
+  Indian token slips, bus tickets and receipts, plus one rubber-stamp red.
+*/
+@theme {
+  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --font-sans: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #f1f4f2;
+  --color-paper-deep: #e3e9e6;
+  --color-ink: #0f2a2e;
+  --color-ink-soft: #45605f;
+  --color-ink-faint: #7b8f8d;
+  --color-line: #c9d4d1;
+  --color-accent: #d3305f;
+  --color-accent-deep: #a8204a;
+  --color-accent-wash: #fbe2ea;
+  --color-labs: #0f2a2e;
+  --color-good: #2f6b3f;
+  --color-wa: #25d366;
+  --color-wa-deep: #075e54;
+  --color-wa-chat: #e6ece9;
+  --color-wa-bubble: #ffffff;
+
+  --color-slip-yellow: #f6e283;
+  --color-slip-pink: #f5c2cf;
+  --color-slip-green: #c3e5c7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+html, body, #root {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+::selection { background: var(--color-slip-yellow); }
+
+/* Perforated tear line between a stub and its body */
+.perf-x {
+  background-image: radial-gradient(circle, var(--color-paper) 3.5px, transparent 4px);
+  background-size: 14px 14px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+.perf-y {
+  background-image: radial-gradient(circle, var(--color-paper) 3.5px, transparent 4px);
+  background-size: 14px 14px;
+  background-repeat: repeat-y;
+  background-position: center;
+}
+
+/* The one orchestrated moment: slips drop onto the stack on load */
+@keyframes slip-in {
+  from { opacity: 0; transform: translateY(-28px) rotate(var(--r-from, 0deg)); }
+  to { opacity: 1; transform: translateY(0) rotate(var(--r, 0deg)); }
+}
+.slip-drop {
+  transform: rotate(var(--r, 0deg));
+  animation: slip-in 520ms cubic-bezier(.2, .8, .25, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .slip-drop { animation: none; }
+}
+
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
