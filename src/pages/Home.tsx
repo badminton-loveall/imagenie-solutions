@@ -4,6 +4,7 @@ import { ArrowRight, Mail, MessageCircle, Phone } from 'lucide-react'
 import { HeroSlips } from '../components/HeroSlips'
 import { ProductTicket } from '../components/ProductTicket'
 import { Reveal } from '../components/Reveal'
+import { StudioVisual } from '../components/StudioVisual'
 import { company, products } from '../data/company'
 
 const stack = [
@@ -34,8 +35,7 @@ export function Home() {
       {/* Hero */}
       <section className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-20 pt-12 sm:px-8 md:pt-16 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
         <div>
-          <p className="text-sm text-ink-soft">Imagenie Labs and Imagenie Studios, Thrissur</p>
-          <h1 className="mt-4 font-display text-[4.25rem] font-black leading-[0.88] tracking-[-0.01em] sm:text-[6rem] lg:text-[7.25rem]">
+          <h1 className="font-display text-[4.25rem] font-black leading-[0.88] tracking-[-0.01em] sm:text-[6rem] lg:text-[7.25rem]">
             Software people find easy to use.
           </h1>
           <p className="mt-7 max-w-lg text-lg leading-relaxed text-ink-soft">
@@ -149,13 +149,8 @@ export function Home() {
       {/* Studios */}
       <section id="studios" className="scroll-mt-20 border-t-2 border-dashed border-line">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-20 sm:px-8 md:grid-cols-2 md:gap-16 md:py-24">
-          <Reveal from="wipe">
-            <img
-              src="https://cdn.magicpatterns.com/patterns/generated-images/3d541b85-d27e-46a9-beef-e18cbdeb4484.jpg"
-              alt="Imagenie Studios crew filming an interview in a carpentry workshop"
-              loading="lazy"
-              className="aspect-[4/3] w-full rounded-[4px] object-cover"
-            />
+          <Reveal from="left">
+            <StudioVisual />
           </Reveal>
           <Reveal from="right" delay={200}>
             <p className="text-sm text-ink-faint">Imagenie Studios</p>
