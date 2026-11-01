@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Navigate, NavLink, Outlet } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
 
@@ -8,6 +8,7 @@ const nav = [
   { to: '/admin/overview', label: 'Overview' },
   { to: '/admin/leads', label: 'Leads' },
   { to: '/admin/subscriptions', label: 'Customers' },
+  { to: '/admin/documents', label: 'Quotes and invoices' },
   { to: '/admin/bills', label: 'Bills' },
   { to: '/admin/transactions', label: 'Transactions' },
   { to: '/admin/settings', label: 'Settings' },
@@ -27,6 +28,15 @@ function useNoIndex() {
       document.title = prevTitle
     }
   }, [])
+}
+
+/** Guards a page that draws without the admin header, such as the print view. */
+export function RequireAdmin({ children }: { children: ReactNode }) {
+  const auth = useAdminAuth()
+  useNoIndex()
+  if (auth.status === 'loading') return <p className="p-8 text-ink-soft">Checking your sign-in…</p>
+  if (auth.status !== 'admin') return <Navigate to="/admin/login" replace />
+  return <>{children}</>
 }
 
 export function AdminLayout() {

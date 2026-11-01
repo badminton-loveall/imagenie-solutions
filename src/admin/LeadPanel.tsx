@@ -81,6 +81,23 @@ export function LeadPanel({ lead, onClose, onSaved, onDeleted }: Props) {
           </button>
           <div className="flex flex-wrap gap-2">
             <button
+              onClick={() =>
+                navigate('/admin/documents/new?kind=quotation', {
+                  state: {
+                    prefill: {
+                      customer_name: lead.organisation || lead.name,
+                      customer_email: lead.email,
+                      customer_phone: lead.phone,
+                      lead_id: lead.id,
+                    },
+                  },
+                })
+              }
+              className={secondaryButton}
+            >
+              Create quotation
+            </button>
+            <button
               onClick={() => navigate('/admin/subscriptions', { state: { fromLead: lead } })}
               className={secondaryButton}
             >

@@ -13,6 +13,10 @@ import { OverviewPage } from './admin/OverviewPage'
 import { BillsPage } from './admin/BillsPage'
 import { TransactionsPage } from './admin/TransactionsPage'
 import { SettingsPage } from './admin/SettingsPage'
+import { DocumentsPage } from './admin/DocumentsPage'
+import { DocumentEditor } from './admin/DocumentEditor'
+import { DocumentPrint } from './admin/DocumentPrint'
+import { RequireAdmin } from './admin/AdminLayout'
 
 function AdminRoot() {
   return (
@@ -42,7 +46,18 @@ export function App() {
             <Route path="bills" element={<BillsPage />} />
             <Route path="transactions" element={<TransactionsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="documents" element={<DocumentsPage />} />
+            <Route path="documents/new" element={<DocumentEditor key="new" />} />
+            <Route path="documents/:id" element={<DocumentEditor />} />
           </Route>
+          <Route
+            path="documents/:id/print"
+            element={
+              <RequireAdmin>
+                <DocumentPrint />
+              </RequireAdmin>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

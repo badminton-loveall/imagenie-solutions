@@ -70,3 +70,11 @@ html, body, #root {
 }
 
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+/* Quotations and invoices print on A4 with only the document showing */
+@media print {
+  @page { size: A4; margin: 14mm; }
+  html, body, #root { background: #fff !important; }
+  .no-print { display: none !important; }
+  .doc-page { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { supabase } from '../lib/supabase'
 import {
@@ -100,6 +101,22 @@ export function SubscriptionPanel({ subscription: s, fromLead, onClose, onSaved,
     onSaved(data as Subscription)
   }
 
+  const navigate = useNavigate()
+  const createInvoice = () => {
+    if (!s) return
+    navigate('/admin/documents/new?kind=invoice', {
+      state: {
+        prefill: {
+          customer_name: s.customer,
+          customer_email: s.contact_email,
+          customer_phone: s.contact_phone,
+          subscription_id: s.id,
+          items: [{ description: [s.product, s.plan].filter(Boolean).join(', '), quantity: 1, unit_price: s.amount_inr }],
+        },
+      },
+    })
+  }
+
   const [paidNote, setPaidNote] = useState('')
   const recordPayment = async () => {
     if (!s) return
@@ -143,9 +160,14 @@ export function SubscriptionPanel({ subscription: s, fromLead, onClose, onSaved,
           )}
           <div className="flex flex-wrap gap-2">
             {s && s.status !== 'cancelled' && s.status !== 'expired' ? (
-              <button onClick={recordPayment} disabled={busy !== null} className={secondaryButton}>
-                Record payment
-              </button>
+              <>
+                <button onClick={createInvoice} disabled={busy !== null} className={secondaryButton}>
+                  Create invoice
+                </button>
+                <button onClick={recordPayment} disabled={busy !== null} className={secondaryButton}>
+                  Record payment
+                </button>
+              </>
             ) : (
               <button onClick={onClose} className={secondaryButton}>
                 Cancel

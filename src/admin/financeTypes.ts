@@ -70,6 +70,15 @@ export type BusinessSettings = {
   gstin: string | null
   state: string
   address: string | null
+  email: string | null
+  phone: string | null
+  bank_name: string | null
+  bank_account_name: string | null
+  bank_account_number: string | null
+  bank_ifsc: string | null
+  upi_id: string | null
+  invoice_terms: string | null
+  quotation_terms: string | null
   updated_at: string
 }
 

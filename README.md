@@ -55,6 +55,17 @@ Sign in at `/admin` with an approved email. There's no password: you get a one-t
 - **Customers** (`/admin/subscriptions`): **Record payment** adds the customer's payment to income and moves their renewal date on.
 - **Settings** (`/admin/settings`): business name, address and GSTIN. With a GSTIN set, the Overview shows GST payable (collected minus paid).
 
+### Quotations and invoices (`/admin/documents`)
+
+- Create a quotation or invoice with line items (description, HSN/SAC, quantity, unit, rate, GST %). Totals and amount in words update as you type. Customer names autocomplete from earlier documents and customers.
+- **Issue and number it** gives the document its permanent number: `QT/26-27/001`, `INV/26-27/001`. Numbers are sequential per financial year and only assigned on issue, so deleted drafts leave no gaps.
+- **Print / PDF** opens an A4 page: press Print and choose Save as PDF. **Email draft** opens your email app with a message ready (attach the PDF).
+- Quotations: mark Accepted or Declined, or **Convert to invoice** (copies everything and marks the quote accepted).
+- Invoices: **Mark as paid** adds the payment to income in Transactions. Issued invoices are locked; cancel and re-issue to change one.
+- Shortcuts: **Create quotation** on a lead, **Create invoice** on a customer subscription.
+- GST: until a GSTIN is set in Settings, documents carry no GST and print as "Invoice" with "Not registered under GST". With a GSTIN, invoices print as "Tax Invoice" with CGST + SGST for customers in Kerala and IGST for other states.
+- Your UPI ID, bank details and default terms (Settings) print on documents.
+
 **Receipt reading** runs in the Supabase function `extract-receipt` (source in `supabase/functions/extract-receipt`), which sends the uploaded file to Claude (`claude-haiku-5-5`). It needs one secret: in Supabase, open Edge Functions → Secrets and add `ANTHROPIC_API_KEY` with a key from console.anthropic.com. Receipts are stored in the private `receipts` storage bucket; only admins can open them.
 
 **Who can get in:** emails in the `admin_users` table. To add someone, insert their email (lowercase) in Supabase Table Editor → `admin_users`. Anyone else who signs in sees a "no admin access" message and no data; row-level security enforces this in the database, not just the page.
