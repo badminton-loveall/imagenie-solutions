@@ -11,7 +11,7 @@ export function AdminLogin() {
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [error, setError] = useState('')
 
-  if (auth.status === 'admin') return <Navigate to="/admin/leads" replace />
+  if (auth.status === 'admin') return <Navigate to="/admin/overview" replace />
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()

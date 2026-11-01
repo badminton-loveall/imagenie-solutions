@@ -47,6 +47,16 @@ Sign in at `/admin` with an approved email. There's no password: you get a one-t
 - **Leads** (`/admin/leads`): every website enquiry, filterable by status and by follow-ups that are due, with search. Open one to call, email or WhatsApp them, set status, assign it, pick a follow-up date and keep notes. "Add as subscription" turns a lead into a customer and marks it won.
 - **Subscriptions** (`/admin/subscriptions`): customers, product, plan, amount, billing cycle, status and renewal date. The strip at the top shows monthly recurring revenue (active plans only; quarterly and yearly amounts spread per month, one-time payments excluded), active and trial counts, renewals in the next 30 days and past-due accounts. Overdue renewals are highlighted.
 
+### Finance
+
+- **Overview** (`/admin/overview`): money in, money out and profit for an Indian financial year (April to March), month by month, spending by category, GST paid and collected, and bills and customer renewals due in the next 30 days.
+- **Transactions** (`/admin/transactions`): the ledger. Add money in or out, or upload a receipt (screenshot or PDF) and the form fills itself. Foreign-currency receipts ask for the rupee amount from your statement; until it's added they're flagged "Needs ₹ amount" and left out of totals. **Export CSV** gives your accountant the filtered list.
+- **Bills** (`/admin/bills`): subscriptions Imagenie pays for. **Paid** records the payment as an expense and moves the next due date on by the billing cycle.
+- **Customers** (`/admin/subscriptions`): **Record payment** adds the customer's payment to income and moves their renewal date on.
+- **Settings** (`/admin/settings`): business name, address and GSTIN. With a GSTIN set, the Overview shows GST payable (collected minus paid).
+
+**Receipt reading** runs in the Supabase function `extract-receipt` (source in `supabase/functions/extract-receipt`), which sends the uploaded file to Claude (`claude-haiku-5-5`). It needs one secret: in Supabase, open Edge Functions → Secrets and add `ANTHROPIC_API_KEY` with a key from console.anthropic.com. Receipts are stored in the private `receipts` storage bucket; only admins can open them.
+
 **Who can get in:** emails in the `admin_users` table. To add someone, insert their email (lowercase) in Supabase Table Editor → `admin_users`. Anyone else who signs in sees a "no admin access" message and no data; row-level security enforces this in the database, not just the page.
 
 **One-time Supabase setup for sign-in links:** in the Supabase dashboard, open the imagenie project, then Authentication → URL Configuration. Set **Site URL** to the live site address, and add these to **Redirect URLs**:

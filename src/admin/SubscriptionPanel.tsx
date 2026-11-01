@@ -100,6 +100,24 @@ export function SubscriptionPanel({ subscription: s, fromLead, onClose, onSaved,
     onSaved(data as Subscription)
   }
 
+  const [paidNote, setPaidNote] = useState('')
+  const recordPayment = async () => {
+    if (!s) return
+    if (!window.confirm(`Record ${s.customer}'s payment of ₹${s.amount_inr} as received today? This adds it to income and moves the renewal date on.`)) return
+    setBusy('saving')
+    setError('')
+    const { error: rpcError } = await supabase.rpc('mark_subscription_paid', { p_subscription_id: s.id, p_paid_on: today })
+    if (rpcError) {
+      setBusy(null)
+      setError(`The payment wasn't recorded: ${rpcError.message}`)
+      return
+    }
+    const { data } = await supabase.from('subscriptions').select('*').eq('id', s.id).single()
+    setBusy(null)
+    setPaidNote('Payment recorded in Transactions.')
+    if (data) onSaved(data as Subscription)
+  }
+
   const remove = async () => {
     if (!s || !window.confirm(`Delete the ${s.product} subscription for ${s.customer}? This can't be undone.`)) return
     setBusy('deleting')
@@ -123,10 +141,16 @@ export function SubscriptionPanel({ subscription: s, fromLead, onClose, onSaved,
           ) : (
             <span />
           )}
-          <div className="flex gap-2">
-            <button onClick={onClose} className={secondaryButton}>
-              Cancel
-            </button>
+          <div className="flex flex-wrap gap-2">
+            {s && s.status !== 'cancelled' && s.status !== 'expired' ? (
+              <button onClick={recordPayment} disabled={busy !== null} className={secondaryButton}>
+                Record payment
+              </button>
+            ) : (
+              <button onClick={onClose} className={secondaryButton}>
+                Cancel
+              </button>
+            )}
             <button onClick={() => save()} disabled={!canSave} className={primaryButton}>
               {busy === 'saving' ? 'Saving…' : s ? 'Save changes' : 'Add subscription'}
             </button>
@@ -180,6 +204,11 @@ export function SubscriptionPanel({ subscription: s, fromLead, onClose, onSaved,
         {error && (
           <p role="alert" className="text-sm text-accent-deep">
             {error}
+          </p>
+        )}
+        {paidNote && (
+          <p role="status" className="text-sm text-good">
+            {paidNote}
           </p>
         )}
         <button type="submit" className="sr-only">

@@ -5,8 +5,12 @@ import { LogOut } from 'lucide-react'
 import { signOut, useAdminAuth } from './AdminAuth'
 
 const nav = [
+  { to: '/admin/overview', label: 'Overview' },
   { to: '/admin/leads', label: 'Leads' },
-  { to: '/admin/subscriptions', label: 'Subscriptions' },
+  { to: '/admin/subscriptions', label: 'Customers' },
+  { to: '/admin/bills', label: 'Bills' },
+  { to: '/admin/transactions', label: 'Transactions' },
+  { to: '/admin/settings', label: 'Settings' },
 ]
 
 /** Keeps search engines out of the admin area. */
@@ -44,7 +48,7 @@ export function AdminLayout() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-6">
             <span className="font-display text-2xl font-black leading-none">Imagenie</span>
-            <nav aria-label="Admin" className="flex gap-1">
+            <nav aria-label="Admin" className="-my-1 flex gap-1 overflow-x-auto py-1">
               {nav.map((n) => (
                 <NavLink
                   key={n.to}

@@ -119,8 +119,8 @@ export function SubscriptionsPage() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-5xl font-black leading-none">Subscriptions</h1>
-          <p className="mt-2 text-sm text-ink-soft">Who pays for what, and when it renews.</p>
+          <h1 className="font-display text-5xl font-black leading-none">Customer subscriptions</h1>
+          <p className="mt-2 text-sm text-ink-soft">What customers pay Imagenie, and when it renews. Record payment adds it to income.</p>
         </div>
         <div className="flex gap-2">
           <button

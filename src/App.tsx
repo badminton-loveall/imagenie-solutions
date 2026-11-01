@@ -9,6 +9,10 @@ import { AdminLayout } from './admin/AdminLayout'
 import { AdminLogin } from './admin/AdminLogin'
 import { LeadsPage } from './admin/LeadsPage'
 import { SubscriptionsPage } from './admin/SubscriptionsPage'
+import { OverviewPage } from './admin/OverviewPage'
+import { BillsPage } from './admin/BillsPage'
+import { TransactionsPage } from './admin/TransactionsPage'
+import { SettingsPage } from './admin/SettingsPage'
 
 function AdminRoot() {
   return (
@@ -31,9 +35,13 @@ export function App() {
         <Route path="admin" element={<AdminRoot />}>
           <Route path="login" element={<AdminLogin />} />
           <Route element={<AdminLayout />}>
-            <Route index element={<Navigate to="leads" replace />} />
+            <Route index element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<OverviewPage />} />
             <Route path="leads" element={<LeadsPage />} />
             <Route path="subscriptions" element={<SubscriptionsPage />} />
+            <Route path="bills" element={<BillsPage />} />
+            <Route path="transactions" element={<TransactionsPage />} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Route>
       </Routes>
