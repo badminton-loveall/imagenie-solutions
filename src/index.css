@@ -64,9 +64,54 @@ html, body, #root {
   animation: slip-in 520ms cubic-bezier(.2, .8, .25, 1) both;
 }
 
+/* ---------- Scroll motion ---------- */
+
+/* Hero slips fan out and drift away as the hero scrolls off. --scroll goes 0 → 1. */
+.slip-orbit {
+  transform:
+    translate3d(calc(var(--dx, 0px) * var(--scroll, 0)), calc(var(--dy, 0px) * var(--scroll, 0)), 0)
+    rotate(calc(var(--dr, 0deg) * var(--scroll, 0)));
+  will-change: transform;
+}
+
+/* Generic reveal: slides in on entering the viewport, back out on leaving. */
+.reveal {
+  transition:
+    transform 760ms cubic-bezier(.2, .8, .2, 1) var(--reveal-delay, 0ms),
+    opacity 560ms ease var(--reveal-delay, 0ms),
+    clip-path 900ms cubic-bezier(.65, 0, .35, 1) var(--reveal-delay, 0ms);
+}
+.reveal[data-in='false'] { opacity: 0; }
+.reveal[data-in='false'][data-reveal='up'] { transform: translateY(36px); }
+.reveal[data-in='false'][data-reveal='left'] { transform: translateX(-72px) rotate(-1.5deg); }
+.reveal[data-in='false'][data-reveal='right'] { transform: translateX(72px) rotate(1.5deg); }
+.reveal[data-in='false'][data-reveal='wipe'] { opacity: 1; clip-path: inset(0 100% 0 0); }
+.reveal[data-in='true'][data-reveal='wipe'] { clip-path: inset(0 0 0 0); }
+.reveal[data-in='false'][data-reveal='print'] { transform: translateY(64px) rotate(1deg); }
+
+/* Product tickets form: stub and body slide in from either side and meet at the tear line. */
+.ticket-form > .ticket-stub,
+.ticket-form > .ticket-body,
+.ticket-form > .ticket-perf {
+  transition: transform 820ms cubic-bezier(.2, .8, .2, 1), opacity 600ms ease;
+}
+.ticket-form > .ticket-perf { transition-delay: 260ms; }
+.ticket-form[data-in='false'] > .ticket-stub { transform: translateX(-110px) rotate(-3deg); opacity: 0; }
+.ticket-form[data-in='false'] > .ticket-body { transform: translateX(110px); opacity: 0; }
+.ticket-form[data-in='false'] > .ticket-perf { transform: scaleY(0); opacity: 0; }
+.ticket-form[data-in='false'] .ticket-stamp { transform: scale(1.6) rotate(-14deg); opacity: 0; }
+.ticket-stamp { transition: transform 420ms cubic-bezier(.3, 1.6, .5, 1) 620ms, opacity 200ms ease 620ms; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .slip-drop { animation: none; }
+  .slip-orbit { transform: none !important; }
+  .reveal, .ticket-form > *, .ticket-stamp { transition: none !important; }
+  .reveal[data-in='false'], .ticket-form[data-in='false'] > *, .ticket-form[data-in='false'] .ticket-stamp {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
 }
 
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }

@@ -1,22 +1,31 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { ScanFace } from 'lucide-react'
 
+import { useScrollProgress } from '../lib/motion'
+
 type SlipProps = {
-  className: string
+  /** Where the slip sits in the stack: absolute position and width. */
+  position: string
+  tone: string
   rotate: string
   from: string
   delay: string
+  /** How far the slip drifts as the hero scrolls away. */
+  drift: { x: number; y: number; r: number }
   children: ReactNode
 }
 
-function Slip({ className, rotate, from, delay, children }: SlipProps) {
-  const style = { '--r': rotate, '--r-from': from, animationDelay: delay } as CSSProperties
+function Slip({ position, tone, rotate, from, delay, drift, children }: SlipProps) {
+  const orbit = { '--dx': `${drift.x}px`, '--dy': `${drift.y}px`, '--dr': `${drift.r}deg` } as CSSProperties
+  const drop = { '--r': rotate, '--r-from': from, animationDelay: delay } as CSSProperties
   return (
-    <div
-      className={`slip-drop relative overflow-hidden rounded-[3px] text-ink shadow-[0_1px_0_rgba(15,42,46,0.08),0_18px_30px_-18px_rgba(15,42,46,0.45)] ${className}`}
-      style={style}
-    >
-      {children}
+    <div className={`slip-orbit absolute ${position}`} style={orbit}>
+      <div
+        className={`slip-drop overflow-hidden rounded-[3px] text-ink shadow-[0_1px_0_rgba(15,42,46,0.08),0_18px_30px_-18px_rgba(15,42,46,0.45)] ${tone}`}
+        style={drop}
+      >
+        {children}
+      </div>
     </div>
   )
 }
@@ -29,14 +38,16 @@ const thumbs = ['#c9a98d', '#a98a70', '#e2cdb5', '#8f7560', '#d6bb9f', '#efe0cc'
 
 /** Three printed slips, one per product, stacked as they would land on a counter. Decorative. */
 export function HeroSlips() {
+  const ref = useScrollProgress<HTMLDivElement>()
   return (
     <div
+      ref={ref}
       role="img"
       aria-label="A Qwait token A-23, a Smrithi photo slip showing 38 photos found, and a LoveAll fee receipt stamped paid"
       className="relative mx-auto h-[460px] w-full max-w-[440px] sm:h-[500px]"
     >
       {/* Qwait token */}
-      <Slip className="absolute left-0 top-0 w-[68%] bg-slip-yellow" rotate="-4deg" from="-9deg" delay="80ms">
+      <Slip position="left-0 top-0 w-[68%]" tone="bg-slip-yellow" rotate="-4deg" from="-9deg" delay="80ms" drift={{ x: -70, y: -40, r: -10 }}>
         <div className="px-5 pb-3 pt-4">
           <p className="text-xs">City Clinic, OPD with Dr. Menon</p>
           <p className="mt-1 text-xs text-ink/60">Morning session</p>
@@ -54,7 +65,7 @@ export function HeroSlips() {
       </Slip>
 
       {/* Smrithi photo slip */}
-      <Slip className="absolute right-0 top-[22%] w-[62%] bg-slip-pink" rotate="5deg" from="12deg" delay="240ms">
+      <Slip position="right-0 top-[22%] w-[62%]" tone="bg-slip-pink" rotate="5deg" from="12deg" delay="240ms" drift={{ x: 80, y: -90, r: 12 }}>
         <div className="flex items-center justify-between px-4 pb-3 pt-4">
           <p className="text-xs font-bold">Meera &amp; Arjun's wedding</p>
           <ScanFace className="h-4 w-4" aria-hidden />
@@ -73,7 +84,7 @@ export function HeroSlips() {
       </Slip>
 
       {/* LoveAll fee receipt with a PAID stamp */}
-      <Slip className="absolute bottom-0 left-[10%] w-[64%] bg-slip-green" rotate="-1.5deg" from="4deg" delay="400ms">
+      <Slip position="bottom-0 left-[10%] w-[64%]" tone="bg-slip-green" rotate="-1.5deg" from="4deg" delay="400ms" drift={{ x: -20, y: -150, r: -6 }}>
         <div className="px-5 pb-3 pt-4">
           <p className="text-xs font-bold">Smash Point Academy</p>
           <p className="text-xs text-ink/60">Fee receipt, November batch</p>

@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react'
 
 import type { Product } from '../data/company'
+import { useInView } from '../lib/motion'
 
 const tint: Record<Product['name'], string> = {
   Qwait: 'bg-slip-yellow',
@@ -10,9 +11,15 @@ const tint: Record<Product['name'], string> = {
 
 /** A product shown as a wide counterfoil ticket: coloured stub, tear line, body. */
 export function ProductTicket({ product }: { product: Product }) {
+  // Assembles as it scrolls in (stub from the left, body from the right) and comes apart as it leaves.
+  const [ref, inView] = useInView<HTMLElement>({ threshold: 0.25 })
   return (
-    <article className="grid overflow-hidden rounded-[4px] bg-white shadow-[0_1px_0_rgba(15,42,46,0.06),0_20px_40px_-28px_rgba(15,42,46,0.5)] md:grid-cols-[minmax(220px,0.8fr)_14px_2fr]">
-      <div className={`${tint[product.name]} flex flex-col justify-between gap-8 p-6 sm:p-8`}>
+    <article
+      ref={ref}
+      data-in={inView}
+      className="ticket-form grid drop-shadow-[0_18px_22px_rgba(15,42,46,0.14)] md:grid-cols-[minmax(220px,0.8fr)_14px_2fr]"
+    >
+      <div className={`ticket-stub ${tint[product.name]} flex flex-col justify-between gap-8 rounded-t-[4px] p-6 sm:p-8 md:rounded-l-[4px] md:rounded-tr-none`}>
         <div className="flex items-start justify-between gap-4 text-xs">
           <span>Imagenie Labs</span>
           <span>{product.domain}</span>
@@ -23,10 +30,10 @@ export function ProductTicket({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div aria-hidden className="perf-y hidden bg-paper-deep md:block" />
-      <div aria-hidden className="perf-x h-3.5 bg-paper-deep md:hidden" />
+      <div aria-hidden className="ticket-perf perf-y hidden origin-center bg-paper-deep md:block" />
+      <div aria-hidden className="ticket-perf perf-x h-3.5 origin-center bg-paper-deep md:hidden" />
 
-      <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.3fr_1fr]">
+      <div className="ticket-body grid gap-8 rounded-b-[4px] bg-white p-6 sm:p-8 md:rounded-r-[4px] md:rounded-bl-none lg:grid-cols-[1.3fr_1fr]">
         <div>
           <p className="text-lg leading-relaxed">{product.pitch}</p>
           <p className="mt-5 text-sm text-ink-soft">

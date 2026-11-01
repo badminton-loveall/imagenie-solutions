@@ -3,6 +3,7 @@ import { ArrowRight, Mail, MessageCircle, Phone } from 'lucide-react'
 
 import { HeroSlips } from '../components/HeroSlips'
 import { ProductTicket } from '../components/ProductTicket'
+import { Reveal } from '../components/Reveal'
 import { company, products } from '../data/company'
 
 const stack = [
@@ -29,7 +30,7 @@ const studioWork = [
 
 export function Home() {
   return (
-    <main>
+    <main className="overflow-x-clip">
       {/* Hero */}
       <section className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-20 pt-12 sm:px-8 md:pt-16 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
         <div>
@@ -64,10 +65,14 @@ export function Home() {
       <section id="products" className="scroll-mt-20 border-t-2 border-dashed border-line bg-paper-deep">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 md:py-24">
           <div className="grid gap-6 md:grid-cols-2 md:items-end">
-            <h2 className="font-display text-5xl font-extrabold leading-[0.92] sm:text-6xl">Products you can start using today.</h2>
-            <p className="max-w-md text-lg leading-relaxed text-ink-soft md:justify-self-end">
-              Each one solves a single, everyday problem well. Sign up, set it up in minutes, and pay in rupees.
-            </p>
+            <Reveal from="up">
+              <h2 className="font-display text-5xl font-extrabold leading-[0.92] sm:text-6xl">Products you can start using today.</h2>
+            </Reveal>
+            <Reveal from="up" delay={120} className="md:justify-self-end">
+              <p className="max-w-md text-lg leading-relaxed text-ink-soft">
+                Each one solves a single, everyday problem well. Sign up, set it up in minutes, and pay in rupees.
+              </p>
+            </Reveal>
           </div>
 
           <div className="mt-14 space-y-8">
@@ -81,7 +86,7 @@ export function Home() {
       {/* Custom apps */}
       <section id="custom" className="scroll-mt-20 bg-labs text-paper">
         <div className="mx-auto grid max-w-6xl gap-14 px-5 py-20 sm:px-8 md:py-24 lg:grid-cols-[1fr_1.1fr]">
-          <div>
+          <Reveal from="left">
             <p className="text-sm text-paper/60">Imagenie Labs, custom applications</p>
             <h2 className="mt-4 font-display text-5xl font-extrabold leading-[0.92] sm:text-6xl">
               Need something that doesn't exist yet? We'll build it.
@@ -98,19 +103,25 @@ export function Home() {
                 </div>
               ))}
             </dl>
-          </div>
+          </Reveal>
 
           <div>
             <p className="text-sm text-paper/60">How a custom build runs</p>
             <ol className="mt-5">
               {steps.map((s, i) => (
-                <li key={s.title} className="grid grid-cols-[3rem_1fr] gap-4 border-t border-dashed border-paper/25 py-5 last:border-b">
+                <Reveal
+                  key={s.title}
+                  as="li"
+                  from="right"
+                  delay={i * 110}
+                  className="grid grid-cols-[3rem_1fr] gap-4 border-t border-dashed border-paper/25 py-5 last:border-b"
+                >
                   <span className="font-display text-4xl font-black leading-none text-slip-yellow">{i + 1}</span>
                   <div>
                     <p className="text-lg font-bold">{s.title}</p>
                     <p className="mt-1 text-sm leading-relaxed text-paper/70">{s.detail}</p>
                   </div>
-                </li>
+                </Reveal>
               ))}
             </ol>
             <Link
@@ -125,22 +136,28 @@ export function Home() {
 
       {/* Belief */}
       <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8 md:py-28">
-        <p className="max-w-4xl text-3xl leading-snug sm:text-4xl">
-          We'd rather ship one screen your staff understands on the first day than ten they need training for.
-        </p>
-        <p className="mt-5 max-w-2xl text-lg text-ink-soft">Fewer steps, plain language, and support from people in the same time zone.</p>
+        <Reveal from="up">
+          <p className="max-w-4xl text-3xl leading-snug sm:text-4xl">
+            We'd rather ship one screen your staff understands on the first day than ten they need training for.
+          </p>
+        </Reveal>
+        <Reveal from="up" delay={150}>
+          <p className="mt-5 max-w-2xl text-lg text-ink-soft">Fewer steps, plain language, and support from people in the same time zone.</p>
+        </Reveal>
       </section>
 
       {/* Studios */}
       <section id="studios" className="scroll-mt-20 border-t-2 border-dashed border-line">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-20 sm:px-8 md:grid-cols-2 md:gap-16 md:py-24">
-          <img
-            src="https://cdn.magicpatterns.com/patterns/generated-images/3d541b85-d27e-46a9-beef-e18cbdeb4484.jpg"
-            alt="Imagenie Studios crew filming an interview in a carpentry workshop"
-            loading="lazy"
-            className="aspect-[4/3] w-full rounded-[4px] object-cover"
-          />
-          <div>
+          <Reveal from="wipe">
+            <img
+              src="https://cdn.magicpatterns.com/patterns/generated-images/3d541b85-d27e-46a9-beef-e18cbdeb4484.jpg"
+              alt="Imagenie Studios crew filming an interview in a carpentry workshop"
+              loading="lazy"
+              className="aspect-[4/3] w-full rounded-[4px] object-cover"
+            />
+          </Reveal>
+          <Reveal from="right" delay={200}>
             <p className="text-sm text-ink-faint">Imagenie Studios</p>
             <h2 className="mt-3 font-display text-5xl font-extrabold leading-[0.92]">Video production, from script to screen.</h2>
             <p className="mt-5 text-lg leading-relaxed text-ink-soft">
@@ -163,13 +180,16 @@ export function Home() {
             >
               Plan a video with us
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Contact: take a token */}
-      <section className="px-5 pb-20 sm:px-8 md:pb-24">
-        <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[4px] bg-slip-yellow shadow-[0_20px_40px_-28px_rgba(15,42,46,0.5)] md:grid-cols-[1.3fr_14px_1fr]">
+      <section className="overflow-hidden px-5 pb-20 sm:px-8 md:pb-24">
+        <Reveal
+          from="print"
+          className="mx-auto grid max-w-6xl overflow-hidden rounded-[4px] bg-slip-yellow shadow-[0_20px_40px_-28px_rgba(15,42,46,0.5)] md:grid-cols-[1.3fr_14px_1fr]"
+        >
           <div className="p-8 sm:p-12">
             <h2 className="font-display text-7xl font-black leading-[0.85] sm:text-8xl">Let's talk.</h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed">
@@ -200,7 +220,7 @@ export function Home() {
               Send us a message
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </main>
   )
