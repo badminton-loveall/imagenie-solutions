@@ -40,9 +40,26 @@ Each product is shown as the paper it prints: a Qwait token, a Smrithi photo sli
 
 The design source lives in the Imagenie Magic Patterns workspace.
 
-## Contact form
+## Contact form and leads CRM
 
-There is no backend yet. Submitting the form opens the visitor's email app with the enquiry addressed to `info@imageniestudio.in`, and the WhatsApp box opens a chat with the company number. To receive submissions directly, replace the `mailto:` hand-off in `onSubmit` in `src/pages/Contact.tsx` with a call to a form service or your own API.
+Enquiries from `/contact` are saved to the `leads` table in the **imagenie** Supabase project (`ovkxyvstnavhhwacxkul`, Mumbai). The form posts straight to Supabase's REST API from `src/lib/leads.ts`; no extra package is needed. If saving fails, the visitor is offered the same message pre-filled in their email app, and the WhatsApp box always works.
+
+**Working the leads:** open the project in the Supabase dashboard, then Table Editor → `leads`. Each lead has:
+
+| Column | Filled by | Use |
+| ------ | --------- | --- |
+| `interest`, `name`, `organisation`, `email`, `phone`, `message` | Visitor | What they asked for |
+| `status` | Team | `new` → `contacted` → `qualified` → `won` / `lost` |
+| `assigned_to` | Team | Who is handling it |
+| `follow_up_on` | Team | Date to get back to them |
+| `notes` | Team | Call notes, quotes, next steps |
+| `created_at`, `updated_at` | Automatic | `updated_at` changes whenever the team edits the row |
+
+**Security:** row-level security lets the public site insert the visitor fields only. Visitors cannot read, edit or delete any lead, or write the team columns. Only signed-in dashboard users see the data.
+
+**Configuration:** `.env` holds `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Both are public by design and safe to commit. Never add a secret or `service_role` key there; use `.env.local`, which git ignores.
+
+The schema is in `supabase/migrations/`.
 
 ## Deploying
 

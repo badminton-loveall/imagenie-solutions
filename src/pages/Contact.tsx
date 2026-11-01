@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Check, Mail, MapPin, Phone } from 'lucide-react'
 
 import { Field } from '../components/Field'
+import { submitLead } from '../lib/leads'
 import { WhatsAppChat } from '../components/WhatsAppChat'
 import { company, interests, type Interest } from '../data/company'
 
@@ -34,20 +35,16 @@ export function Contact() {
   const [interest, setInterest] = useState<Interest>(interestFromQuery[params.get('interest') ?? ''] ?? 'A custom app')
   const [form, setForm] = useState<Form>(emptyForm)
   const [emailError, setEmailError] = useState<string | undefined>()
-  const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState<'editing' | 'sending' | 'sent' | 'failed'>('editing')
 
   const set = (key: keyof Form) => (value: string) => {
     setForm((f) => ({ ...f, [key]: value }))
     if (key === 'email') setEmailError(undefined)
+    if (status === 'failed') setStatus('editing')
   }
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    if (!emailPattern.test(form.email.trim())) {
-      setEmailError('Enter a full email address, like name@clinic.in')
-      return
-    }
-    // No backend yet: hand the message to the visitor's email app, addressed to Imagenie.
+  // Backup route if saving fails: the same enquiry, ready to send from the visitor's email app.
+  const mailtoHref = () => {
     const subject = `Website enquiry: ${interest}${form.organisation ? `, ${form.organisation}` : ''}`
     const lines: (string | null)[] = [
       `Interested in: ${interest}`,
@@ -59,8 +56,24 @@ export function Contact() {
       form.message,
     ]
     const body = lines.filter((l): l is string => l !== null).join('\n')
-    window.location.href = `mailto:${company.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSent(true)
+    return `mailto:${company.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (status === 'sending') return
+    if (!emailPattern.test(form.email.trim())) {
+      setEmailError('Enter a full email address, like name@clinic.in')
+      return
+    }
+    setStatus('sending')
+    try {
+      await submitLead({ interest, ...form })
+      setStatus('sent')
+    } catch (err) {
+      console.error(err)
+      setStatus('failed')
+    }
   }
 
   return (
@@ -72,19 +85,19 @@ export function Contact() {
           we'll reply within one working day.
         </p>
 
-        {sent ? (
+        {status === 'sent' ? (
           <div className="mt-12 rounded-[4px] bg-slip-green p-8 shadow-[0_20px_40px_-28px_rgba(15,42,46,0.5)]" role="status">
             <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-good text-white">
               <Check className="h-5 w-5" aria-hidden />
             </span>
-            <h2 className="mt-5 font-display text-4xl font-extrabold leading-none">Your message is ready to send.</h2>
+            <h2 className="mt-5 font-display text-4xl font-extrabold leading-none">Thank you, we have your message.</h2>
             <p className="mt-3 max-w-md">
-              We opened it in your email app, addressed to {company.email}. Press send there and someone from Imagenie will
-              reply within one working day. Nothing opened? Write to us directly or use WhatsApp on this page.
+              Someone from Imagenie will write to you or call within one working day. If it's urgent, message us in the
+              WhatsApp chat on this page.
             </p>
             <button
               onClick={() => {
-                setSent(false)
+                setStatus('editing')
                 setForm(emptyForm)
               }}
               className="mt-8 whitespace-nowrap text-sm font-bold text-ink underline underline-offset-4 transition-colors duration-150 hover:text-accent-deep"
@@ -149,12 +162,25 @@ export function Contact() {
               />
             </label>
 
+            {status === 'failed' && (
+              <div role="alert" className="rounded-[4px] border-2 border-accent bg-accent-wash p-5 text-sm leading-relaxed">
+                <p className="font-bold text-accent-deep">Your message didn't send.</p>
+                <p className="mt-1">
+                  Check your connection and try again, or{' '}
+                  <a href={mailtoHref()} className="font-bold underline underline-offset-4">
+                    send it from your email app
+                  </a>{' '}
+                  instead. Nothing you typed has been lost.
+                </p>
+              </div>
+            )}
+
             <button
               type="submit"
-              disabled={!form.name.trim() || !form.email.trim()}
+              disabled={!form.name.trim() || !form.email.trim() || status === 'sending'}
               className="whitespace-nowrap rounded-full bg-ink px-6 py-3 text-sm font-bold text-paper transition-colors duration-150 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Send message
+              {status === 'sending' ? 'Sending…' : status === 'failed' ? 'Try again' : 'Send message'}
             </button>
           </form>
         )}
