@@ -36,7 +36,7 @@ export function Home() {
       <section className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-20 pt-12 sm:px-8 md:pt-16 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
         <div>
           <h1 className="font-display text-[4.25rem] font-black leading-[0.88] tracking-[-0.01em] sm:text-[6rem] lg:text-[7.25rem]">
-            Software people find easy to use.
+            We build software that people find easy to use.
           </h1>
           <p className="mt-7 max-w-lg text-lg leading-relaxed text-ink-soft">
             Ready-to-use products for Indian businesses, and custom applications built from scratch, deployed and handed

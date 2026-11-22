@@ -14,7 +14,7 @@ export const company = {
 }
 
 export type Product = {
-  name: 'Qwait' | 'Smrithi' | 'LoveAll'
+  name: 'Qwait' | 'Smrithi' | 'LoveAll' | 'LekhPath'
   domain: string
   url: string
   line: string
@@ -53,6 +53,16 @@ export const products: Product[] = [
       'Players, batches, 8-week training plans, assessments, attendance and fees, run from one place instead of registers and WhatsApp groups.',
     forWho: 'Badminton academies, head coaches, assistant coaches and families',
     features: ['8-week training cycles', 'Attendance and leave in a few taps', 'Fee ledger with overdue alerts'],
+  },
+  {
+    name: 'LekhPath',
+    domain: 'lekhpath.com',
+    url: 'https://www.lekhpath.com',
+    line: 'Personal accounting for Indian households',
+    pitch:
+      'A simple accounting app. Record income, expenses, assets and liabilities against your own account heads, by typing or by voice, and get statements and reports.',
+    forWho: 'Households, families and small businesses',
+    features: ['Voice entry for daily expenses and UPI payments', 'Share your accounts with family', 'Free 30-day trial, then Plus or Pro in rupees'],
   },
 ]
 

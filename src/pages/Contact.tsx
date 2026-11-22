@@ -81,7 +81,7 @@ export function Contact() {
       <section>
         <h1 className="font-display text-6xl font-black leading-[0.88] sm:text-8xl">Tell us what you need.</h1>
         <p className="mt-5 max-w-lg text-lg leading-relaxed text-ink-soft">
-          A demo of Qwait, Smrithi or LoveAll, an application built for your business, or a film. A few lines are enough;
+          A demo of Qwait, Smrithi, LoveAll or LekhPath, an application built for your business, or a film. A few lines are enough;
           we'll reply within one working day.
         </p>
 

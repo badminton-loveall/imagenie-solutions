@@ -7,6 +7,7 @@ const tint: Record<Product['name'], string> = {
   Qwait: 'bg-slip-yellow',
   Smrithi: 'bg-slip-pink',
   LoveAll: 'bg-slip-green',
+  LekhPath: 'bg-slip-blue',
 }
 
 /** A product shown as a wide counterfoil ticket: coloured stub, tear line, body. */
@@ -25,7 +26,13 @@ export function ProductTicket({ product }: { product: Product }) {
           <span>{product.domain}</span>
         </div>
         <div>
-          <h3 className="font-display text-6xl font-black leading-[0.9] tracking-tight sm:text-7xl">{product.name}</h3>
+          <h3
+            className={`font-display font-black leading-[0.9] tracking-tight ${
+              product.name.length > 7 ? 'text-5xl sm:text-6xl md:text-5xl lg:text-6xl xl:text-7xl' : 'text-6xl sm:text-7xl'
+            }`}
+          >
+            {product.name}
+          </h3>
           <p className="mt-3 text-sm leading-snug">{product.line}</p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 # Imagenie Solutions website
 
-The company website for Imagenie Solutions, Thrissur: Imagenie Labs products (Qwait, Smrithi, LoveAll), custom applications, and Imagenie Studios video production.
+The company website for Imagenie Solutions, Thrissur: Imagenie Labs products (Qwait, Smrithi, LoveAll, LekhPath), custom applications, and Imagenie Studios video production.
 
 Built with Vite, React 18, TypeScript, Tailwind CSS v4 and React Router.
 
